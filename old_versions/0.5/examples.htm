@@ -1,0 +1,567 @@
+<html>
+<body>
+<title>jQuery.DropdownReplacement</title>
+<!-- these things are here to make this page work -->
+<script type='text/javascript' src="lib/jquery-1.4.2.min.js"></script>
+<script type='text/javascript' src="lib/malsup.js"></script>
+<script type='text/javascript' src="lib/jquery-ui-1.8.2.custom.min.js"></script>
+<script type='text/javascript' src="lib/jquery.jgrowl_pack.js"></script>
+<link        rel="stylesheet" href="lib/jquery-ui-1.8.2.custom.css" media="screen"/>
+<link        rel="stylesheet" href="lib/subtabs.css" media="screen"/>
+<link        rel="stylesheet" href="lib/jquery.jgrowl.css" media="screen"/>
+
+
+<link href='lib/shCore.css' rel='stylesheet' type='text/css'/>
+<link href='http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css' rel='stylesheet' type='text/css'/>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushCpp.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushCSharp.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushCss.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPhp.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPython.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushRuby.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushSql.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushVb.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPerl.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushGroovy.js' type='text/javascript'></script>
+
+<!-- these are the only things you need for the dropdownReplacement plugin to run -->
+<script type='text/javascript' src="jquery.scrollTo-1.4.2.js"></script> <!-- required -->
+<script type='text/javascript' src="jquery.bgiframe.js"></script> <!-- optional: for better IE6 support -->
+<script type='text/javascript' src="jquery.support.windowsTheme-0.3.js"></script> <!-- optional: for better skinning support -->
+<script type='text/javascript' src="jquery.dropdownReplacement-0.5-pack.js"></script> <!-- required -->
+<link   rel="stylesheet" href="jquery.dropdownReplacement-0.5.css" media="screen"/> <!-- required -->
+<!-- end things you need -->
+
+<style type='text/css'>
+
+.myDropdown, select {
+display:inline-block;
+}
+.dropdownOpts table td {
+border: 1px solid blue;
+}
+.dropdownOpts table th {
+background-color:grey;
+}
+body, .ui-widget input {
+  font-size: 12px;
+  font-family: verdana;
+}
+.left, .right {
+  position:relative;
+  display:inline;
+  margin: 5px auto;
+}
+.left {
+  float:left;
+  width:70%
+}
+.right {
+  float: right;
+  width:30%
+}
+.clear {
+  clear:both;
+}
+.hr {
+	border-bottom:1px dashed blue;
+	height:1px;
+	margin:1em auto;
+	clear:both;
+}
+.blockinput input {
+ 	display: block;
+}
+h1, h2 {
+	clear:both;
+	display: block;
+	margin: 2em, 0;
+}
+.api {
+	border-bottom: 1px dotted blue;
+}
+
+</style>
+
+<div id="tabs">
+<ul>
+<li><a href="#tabs-1">Getting Started</a></li>
+<li><a href="#tabs-2">Options</a></li>
+<li><a href="#tabs-3">Examples</a></li>
+<li><a href="#tabs-4">Download</a></li>
+</ul>
+<div id="tabs-1" data-tabid='getting-started'>
+<p>
+<h1>Overview</h1>
+The jQuery dropdownReplacement plugin allows you to and unobtrusively upgrade inputs and native selects into a  dropdown widget that is indistingushable from a native select box in both look and functionality.<br/><br/>
+A quick demo: <input id="demoQuick" type="text" value="Am Bahnhof Westend"/> (See <a href="javascript:tab(2)">examples</a> for much more)<br/><br/>
+There are several advantages to using a javascript widget over the native select box:<br/>
+<ul>
+<li>Skinnable</li>
+<li><a href="http://webbugtrack.blogspot.com/2007/11/bug-280-lack-of-events-for-options.html">Less</a> <a href="http://stackoverflow.com/questions/570642/height-of-an-html-select-box-dropdown">restrictive</a></li>
+<li>Save bandwidth</li>
+<li>Interesting things can be done!</li>
+</ul>
+Furthermore, this plugin provides numerous options for customization, and has been tested on all major browsers and is being used in a production enviorment.
+
+<h1>Quick Start Guide</h1>
+<h2>Converting an existing select</h2>
+Find an existing select box to convert:
+<script type="syntaxhighlighter" class="brush: javascript">
+<select name="cars" id="carsSelect">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+</select>
+</script>
+Include the scripts and styles required by the dropdownReplacement plugin and a short script to initialize the dropdown when the DOM is ready:
+<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+&lt;script type='text/javascript' src="lib/jquery.scrollTo-1.4.2.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.bgiframe.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.support.windowsTheme-0.3.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.dropdownReplacement.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="lib/jquery.dropdownReplacement.css" media="screen"/&gt;
+
+&lt;script type="text/javascript"&gt;
+$(document).ready(function() {
+$("#carsSelect").dropdownReplacement();
+});
+&lt;script&gt;
+...
+]]></script>
+This will yeild a widgetized select:
+<select name="cars" id="carsSelect" style="display:inline">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+</select>
+<- Yes that is a javascript widget you are looking at.
+<h2>Widgetizing an input</h2>
+Its not always optimal to build a widget from an existing select, for that reason you have an option to widgetize an input box by providing a list of options to use in JSON format.<br/><br/>
+You start out with an input that can contain the default text selection of the to-be dropdown:
+<script type="syntaxhighlighter" class="brush: javascript">
+<input name="foodInput" id="foodInput" value="Hotdog" type="text"/>
+</script>
+Include the scripts and styles required by the dropdownReplacement plugin and a short script to initialize the dropdown when the DOM is ready:
+<script type="syntaxhighlighter" class="brush: html"><![CDATA[
+&lt;script type='text/javascript' src="lib/jquery.scrollTo-1.4.2.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.bgiframe.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.support.windowsTheme-0.3.js"&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src="lib/jquery.dropdownReplacement.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="lib/jquery.dropdownReplacement.css" media="screen"/&gt;
+
+&lt;script type="text/javascript"&gt;
+$(document).ready({function() {
+$("#foodInput").dropdownReplacement("options":
+[{"v":"hamburg", "t":"Hamburger"},
+{"v":"cutlet", "t":"Cutlet"},
+{"v":"hotdog", "t":"Hotdog"},
+{"v":"meat", "t":"meat"},
+{"v":"apple", "t":"apple"},
+{"v":"candy", "t":"candy"},
+{"v":"long-thing", "t":"lots of snacks"}],
+resizeSelectToFitOptions: true});
+});
+&lt;script&gt;
+...
+]]></script>
+This will yeild a widgetized select: <input name="foodInput" id="foodInput" value="Hotdog" type="text"/>
+<br/><br/>
+Those are the basics! For more complex demos see the <a href="javascript:tab(2)">examples</a> tab or take a look at the <a href="javascript:tab(1)">API</a>.
+
+</p>
+</div>
+<div id="tabs-2" data-tabid='options'>
+	<p>
+	<h1>Options</h1>
+	Options aint here yet
+	</p>
+</div>
+<div id="tabs-3" data-tabid='examples'>
+	<p>
+	<h1>Code Samples</h1>
+	<div id="sub-tabs">
+		<ul class="sampleAnchors">
+			<li><a href="#sample1">Upgrading a &lt;select&gt;</a></li>
+			<li><a href="#sample2">Upgrading an &lt;input&gt;</a></li>
+			<li><a href="#sample3">Advanced examples</a></li>
+			<li><a href="#sample4">Data Access</a></li>
+
+		</ul>
+		<div id="sample1" class="sampleTabContent" data-tabid='select'>
+		<p>
+			<h2>Existing select box</h2>
+			Starting with the following select box: <select id="demo0" name="demo0">
+			<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+			</select>
+			<div class="hr">&nbsp;</div>
+			<div class="clear">
+				The simplest way to upgrade this to a dropdown widget is:
+			</div>
+			<div class="left">
+				<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+				$("#demo1").dropdownReplacement();
+				]]></script>
+			</div>
+			<div class="right">
+				<select id="demo1" name="demo1">
+				<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+				</select>
+			</div>
+			<div class="clear">
+				Note how the dropdown extends over the width of the select box. This is usually desired. If you select text that does not fit into the select box, it gets an ellipsis added to it automatically.<br/><br/>
+				You can use up and down arrows to navigate the select box, also you can type letters in order to jump to that letter.
+			</div>
+
+			<div class="hr">&nbsp;</div>
+			<div class="clear">
+				Control the number of items shown:
+			</div>
+			<div class="left">
+				<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+				$("#demo2").dropdownReplacement({optionsDisplayNum: 5});
+				]]></script>
+			</div>
+			<div class="right">
+				<select id="demo2" name="demo2">
+				<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+				</select>
+			</div>
+		  <div class="hr">&nbsp;</div>
+			<div class="clear">
+				Dropdown is resized to fit the options:
+			</div>
+			<div class="left">
+				<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+				$("#demo3").dropdownReplacement({resizeSelectToFitOptions: true});
+				]]></script>
+			</div>
+			<div class="right">
+				<select id="demo3" name="demo3">
+				<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+				</select>
+			</div>
+		  <div class="hr">&nbsp;</div>
+			<div class="clear">
+				Dropdown is resized to 100px, and a change function is wired:
+			</div>
+			<div class="left">
+				<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+				$("#demo4").dropdownReplacement({selectCssWidth: 100, onSelect : function(value, text, selectIndex){
+					alert("value:"+value+" text:"+text);
+					//in this context, this = select
+				}});
+				]]></script>
+			</div>
+			<div class="right">
+				<select id="demo4" name="demo4">
+				<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+				</select>
+			</div>
+			<div class="clear"> </div>
+	</p>
+	</div>
+	<div id="sample2" class="sampleTabContent" data-tabid='input'>
+	<p>
+		<h2>Widgetizing an input</h2>
+		You have more control when you widgetize an input, or a set of inputs.
+	  <div class="hr">&nbsp;</div>
+		<div class="clear">
+			Five inputs are widgetized to use the same dropdown body. This is very useful in reports where you have to make identical selections for sets of items. This saves bandwidth as well.<br/>
+			The last param in the change function gives you the index of the triggering input.
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			html:
+			<input class="demo5" type="text" value="Am Bahnhof Westend"/>&nbsp;<input class="demo5" type="text" value="Abbestraﬂe"/>&nbsp;<input class="demo5" type="text"/>&nbsp;<input class="demo5" type="text"/>&nbsp;<input class="demo5" type="text" value="Barbarossastraﬂe"/>
+
+			script:
+			$(".demo5").dropdownReplacement({optionsDisplayNum: 10, options: [{"t":"Aachener Straﬂe","v":"1"}, ... ,{"t":"Barbarossastraﬂe","v":"100"}], onSelect : function(value, text, selectIndex){
+				alert("value:"+value+" text:"+text + " index:"+ selectIndex);
+				//in this context, this = select
+			}});
+			]]></script>
+		</div>
+		<div class="right blockinput">
+			<input class="demo5" type="text" value="Am Bahnhof Westend"/>&nbsp;
+			<input class="demo5" type="text" value="Abbestraﬂe"/>&nbsp;
+			<input class="demo5" type="text"/>&nbsp;
+			<input class="demo5" type="text"/>&nbsp;
+			<input class="demo5" type="text" value="Barbarossastraﬂe"/>&nbsp;
+		</div>
+		You can widgetize any number of inputs. You can only widgetize one select at a time.
+		<div class="hr">&nbsp;</div>
+		<div class="clear">
+		A single input is widgetized, but two dropdown widgets are wired into it. This means that both dropdowns feed into one form input. This is useful when you want to show two different inputs, usually one at a time, but simplify the serverside by using a single form name.
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			html:
+			<input id="demo6" type="text" value="fruit" name="demo6"/>
+
+			script:
+			var $d6Selection = $("#demo6info");
+			var $demo6 = $("#demo6");
+			var selFn = function(){
+				//to demonstrate the point, ill pull directly from widgetized input instead of using the incoming values
+				$d6Selection.html("selection value is: " +$demo6.val());
+			};
+			var $ddNonMeat = $("#demo6").dropdownReplacement({options: [{"v":"salad", "t":"salad"},{"v":"fruit", "t":"fruit"},{"v":"corn", "t":"corn"},{"v":"icecream", "t":"icecream"}], onSelect : selFn});
+			var $ddMeat = $("#demo6").dropdownReplacement({options: [{"v":"steak", "t":"steak"},{"v":"lamb", "t":"lamb"},{"v":"pork", "t":"pork"}], onSelect : selFn});
+
+			$ddMeat.hide();
+			$(".demo6radio").change(function(){
+				if(this.id === "d6m"){
+					$ddMeat.show();
+					$ddNonMeat.hide();
+				} else {
+					$ddMeat.hide();
+					$ddNonMeat.show();
+				}
+			});
+			]]></script>
+		</div>
+		You can wire any number of dropdowns into a single input, just make sure you hide some of them because they will all be visible when created.
+		<div class="right">
+			<input id="demo6" type="text" value="fruit" name="demo6"/><br/><span> Change dropdown:</span>
+			<label for="d6v">non-meat:</label><input id="d6v" class="demo6radio" type="radio" name="d6r" value="" checked="true"/>
+			<label for="d6m">meat:</label><input id="d6m" class="demo6radio" type="radio" name="d6r" value=""/><br/>
+			<div id="demo6info"></div>
+		</div>
+		<div class="clear"> </div>
+	</p>
+	</div>
+	<div id="sample3" class="sampleTabContent" data-tabid='advanced'>
+	<p>
+		<h2>Using Advanced Options</h2>
+		<div class="clear">
+			Resize options to fit (a large) select:
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			$("#demo7").dropdownReplacement({resizeOptionsToFitSelect: true, options: [{"v":"salad", "t":"salad"},{"v":"fruit", "t":"fruit"},{"v":"corn", "t":"corn"},{"v":"icecream", "t":"icecream"}]});
+			]]></script>
+		</div>
+		<div class="right">
+			<select id="demo7" name="demo7" style="width:330px">
+			<option value="1">Aachener Stra&#223;e</option><option value="2">Abbestra&#223;e</option><option value="3">Adalbertstra&#223;e</option><option value="4">Adam-von-Trott-Stra&#223;e</option><option value="5">Adenauerplatz</option><option value="6">Admiralstra&#223;e</option><option value="7">Agathe-Lasch-Platz</option><option value="8">Ahornallee</option><option value="9">Ahrensfelder Chaussee</option><option value="10">Ahrenshooper Stra&#223;e</option><option value="11">Ahrweilerstra&#223;e</option><option value="12">Akazienallee</option><option value="13">Albrecht-Achilles-Stra&#223;e</option><option value="14">Alemannenallee</option><option value="15">Alexandrinenstra&#223;e</option><option value="16">Alfred-D&#246;blin-Platz</option><option value="17">Allendorfer Weg</option><option value="18">Alte Allee</option><option value="19">Alte Brauerei</option><option value="20">Alte Jakobstra&#223;e</option><option value="21">Altenburger Allee</option><option value="22">Altenhofer Stra&#223;e</option><option value="23">Alt-Lietzow</option><option value="24">Alt-Stralau</option><option value="25">Am Bahnhof Grunewald</option><option value="26">Am Bahnhof Jungfernheide</option><option value="27">Am Bahnhof Westend</option><option value="28">Am Berl</option><option value="29">Am Breiten Luch</option><option value="30">Am Comeniusplatz</option><option value="31">Am Containerbahnhof</option><option value="32">Am D&#246;rferweg</option><option value="33">Am Dornbusch</option><option value="34">Am Faulen See</option><option value="35">Am Fliederbusch</option><option value="36">Am Glockenturm</option><option value="37">Am G&#252;terbahnhof Halensee</option><option value="38">Am Gutshof</option><option value="39">Am Hain</option><option value="40">Am Heidebusch</option><option value="41">Am Johannistisch</option><option value="42">Am Oberbaum</option><option value="43">Am Ostbahnhof</option><option value="44">Am Postbahnhof</option><option value="45">Am Postfenn</option><option value="46">Am Postfenn</option><option value="47">Am Rudolfplatz</option><option value="48">Am Rupenhorn</option><option value="49">Am Schillertheater</option><option value="50">Am Speicher</option><option value="51">Am Spreebord</option><option value="52">Am Tempelhofer Berg</option><option value="53">Am Vogelherd</option><option value="54">Am Volkspark</option><option value="55">Am Weinhang</option><option value="56">Am Westkreuz</option><option value="57">Am Wriezener Bahnhof</option><option value="58">Amselstra&#223;e</option><option value="59">Amtsgerichtsplatz</option><option value="60">An der Barthschen Promenade</option><option value="61">An der Brauerei</option><option value="62">An der Flie&#223;wiese</option><option value="63">An der Margaretenh&#246;he</option><option value="64">An der Michaelbr&#252;cke</option><option value="65">An der Ostbahn</option><option value="66">An der Schillingbr&#252;cke</option><option value="67">Andreasplatz</option><option value="68">Andreasstra&#223;e</option><option value="69">Angerburger Allee</option><option value="70">Anhalter Stra&#223;e</option><option value="71">Anna-Ebermann-Stra&#223;e</option><option value="72">Annemariestra&#223;e</option><option value="73">Arcostra&#223;e</option><option value="74">Arendsweg</option><option value="75">Arndtstra&#223;e</option><option value="76">Arnimstra&#223;e</option><option value="77">Arysallee</option><option value="78">Aschaffenburger Stra&#223;e</option><option value="79">Askanischer Platz</option><option value="80">A&#223;mannshauser Stra&#223;e</option><option value="81">Astridstra&#223;e</option><option value="82">Auerbacher Stra&#223;e</option><option value="83">Auerstra&#223;e</option><option value="84">Augsburger Stra&#223;e</option><option value="85">Augsburger Stra&#223;e</option><option value="86">Augustastra&#223;e</option><option value="87">Auguste-Viktoria-Stra&#223;e</option><option value="88">Avus</option><option value="89">Avus</option><option value="90">Axel-Springer-Stra&#223;e</option><option value="91">Babelsberger Stra&#223;e</option><option value="92">Badenallee</option><option value="93">Badensche Stra&#223;e</option><option value="94">Baerwaldstra&#223;e</option><option value="95">Bahnhofstra&#223;e</option><option value="96">Bahrfeldtstra&#223;e</option><option value="97">Ballenstedter Stra&#223;e</option><option value="98">Bamberger Stra&#223;e</option><option value="99">B&#228;nschstra&#223;e</option><option value="100">Barbarossastra&#223;e</option>
+			</select>
+		</div>
+		<div class="clear">
+			There is another option <span class="api">resizeOptionsToFitSelect</span> which defaults to true. Usually you want to resize the options, but not the select.
+		</div>
+		<div class="hr">&nbsp;</div>
+		<div class="clear">
+			A dictionary tree of the dropdown options is built to do quick selections when user types a letter or letters. By default the dictionary is 3 letters deep, meaning that only the first 3 letters of each option are added to the dictionary.<br/><br/>
+			The option <span class="api">lookupMaxWordLength</span> sets the number of letters to remember. Increasing this number will lead to slower widget init time. The question of "how much slower?" is up to you to answer.
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			$("#demo8").dropdownReplacement({lookupMaxWordLength:5, optionsDisplayNum: 10, options: [{"t":"Aachener Straﬂe","v":"1"}, ... ,{"t":"Barbarossastraﬂe","v":"100"}]});
+			]]></script>
+		</div>
+		<div class="right">
+			<input id="demo8" type="text" value="" name="demo8"/>
+		</div>
+		<div class="clear">
+			Go ahead and type some weird european city names into the dropdown and watch it seek to them. Press 'b' a few times in a row and see what happens.
+		</div>
+		<div class="hr">&nbsp;</div>
+		<div class="clear">
+			In order to make the dropdown widget less of a CPU hog, keyboard events are debounced, this can make the widget seem less responsive. You can use the options
+			<span class="api">debounceLookupMs</span> and <span class="api">debounceArrowsMs</span> to change the debounce intervals.
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			$("#demo9").dropdownReplacement({debounceLookupMs:10, debounceArrowsMs: 2, options: [{"t":"Aachener Straﬂe","v":"1"}, ... ,{"t":"Barbarossastraﬂe","v":"100"}]});
+			]]></script>
+		</div>
+		<div class="right">
+			<input id="demo9" type="text" value="" name="demo8"/>
+		</div>
+		<div class="clear">
+		The default values are <span class="api">debounceLookupMs</span>=200 and <span class="api">debounceArrowsMs</span>=50. This dropdown should seem more responsive than the others (unless it hogs your CPU).
+		</div>
+		<div class="hr">&nbsp;</div>
+		<div class="clear">
+			There are 3 options which control the ellipsis functionality. If <span class="api">ellipsisSelectText</span< is true, which it is by default, then text which does not fit into the select box is truncated,<br/><br/>
+			<span class="api">ellipsisText</span> by default is set to "..." but can be anything.<br/>
+			Normally <span class="api">charWidth</span> is null, which means that determining where to chop of the text is done using magic. If the magic fails, you can set the character width that is used in the calculation here. Double values work fine.
+		</div>
+		<div class="left">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+			$("#demo10").dropdownReplacement({selectCssWidth: 100, ellipsisText: decodeURIComponent("%E0%B2%A0_%E0%B2%A0"), options: [{"t":"Aachener Straﬂe","v":"1"}, ... ,{"t":"Barbarossastraﬂe","v":"100"}]});
+			]]></script>
+		</div>
+		<div class="right">
+			<input id="demo10" type="text" value="" name="demo10"/>
+		</div>
+		<div class="clear">
+		Not surprisingly, the text is chopped off much sooner then it needs to be now.
+		</div>
+
+	</p>
+	</div>
+	<div id="sample4" class="sampleTabContent" data-tabid='data-access'>
+		<p>
+		<h2>Data Access</h2>
+		todo...
+		</p>
+	</div>
+
+</p>
+</div>
+<div id="tabs-4" data-tabid='download'>
+	<p>
+	<h1>Download</h1>
+	Also not done
+	</p>
+</div>
+</div>
+
+
+
+
+<script type='text/javascript'>
+
+var demos = {};
+var bigOptions = [{"t":"Aachener Straﬂe","v":"1"},{"t":"Abbestraﬂe","v":"2"},{"t":"Adalbertstraﬂe","v":"3"},{"t":"Adam-von-Trott-Straﬂe","v":"4"},{"t":"Adenauerplatz","v":"5"},{"t":"Admiralstraﬂe","v":"6"},{"t":"Agathe-Lasch-Platz","v":"7"},{"t":"Ahornallee","v":"8"},{"t":"Ahrensfelder Chaussee","v":"9"},{"t":"Ahrenshooper Straﬂe","v":"10"},{"t":"Ahrweilerstraﬂe","v":"11"},{"t":"Akazienallee","v":"12"},{"t":"Albrecht-Achilles-Straﬂe","v":"13"},{"t":"Alemannenallee","v":"14"},{"t":"Alexandrinenstraﬂe","v":"15"},{"t":"Alfred-Dˆblin-Platz","v":"16"},{"t":"Allendorfer Weg","v":"17"},{"t":"Alte Allee","v":"18"},{"t":"Alte Brauerei","v":"19"},{"t":"Alte Jakobstraﬂe","v":"20"},{"t":"Altenburger Allee","v":"21"},{"t":"Altenhofer Straﬂe","v":"22"},{"t":"Alt-Lietzow","v":"23"},{"t":"Alt-Stralau","v":"24"},{"t":"Am Bahnhof Grunewald","v":"25"},{"t":"Am Bahnhof Jungfernheide","v":"26"},{"t":"Am Bahnhof Westend","v":"27"},{"t":"Am Berl","v":"28"},{"t":"Am Breiten Luch","v":"29"},{"t":"Am Comeniusplatz","v":"30"},{"t":"Am Containerbahnhof","v":"31"},{"t":"Am Dˆrferweg","v":"32"},{"t":"Am Dornbusch","v":"33"},{"t":"Am Faulen See","v":"34"},{"t":"Am Fliederbusch","v":"35"},{"t":"Am Glockenturm","v":"36"},{"t":"Am G¸terbahnhof Halensee","v":"37"},{"t":"Am Gutshof","v":"38"},{"t":"Am Hain","v":"39"},{"t":"Am Heidebusch","v":"40"},{"t":"Am Johannistisch","v":"41"},{"t":"Am Oberbaum","v":"42"},{"t":"Am Ostbahnhof","v":"43"},{"t":"Am Postbahnhof","v":"44"},{"t":"Am Postfenn","v":"45"},{"t":"Am Postfenn","v":"46"},{"t":"Am Rudolfplatz","v":"47"},{"t":"Am Rupenhorn","v":"48"},{"t":"Am Schillertheater","v":"49"},{"t":"Am Speicher","v":"50"},{"t":"Am Spreebord","v":"51"},{"t":"Am Tempelhofer Berg","v":"52"},{"t":"Am Vogelherd","v":"53"},{"t":"Am Volkspark","v":"54"},{"t":"Am Weinhang","v":"55"},{"t":"Am Westkreuz","v":"56"},{"t":"Am Wriezener Bahnhof","v":"57"},{"t":"Amselstraﬂe","v":"58"},{"t":"Amtsgerichtsplatz","v":"59"},{"t":"An der Barthschen Promenade","v":"60"},{"t":"An der Brauerei","v":"61"},{"t":"An der Flieﬂwiese","v":"62"},{"t":"An der Margaretenhˆhe","v":"63"},{"t":"An der Michaelbr¸cke","v":"64"},{"t":"An der Ostbahn","v":"65"},{"t":"An der Schillingbr¸cke","v":"66"},{"t":"Andreasplatz","v":"67"},{"t":"Andreasstraﬂe","v":"68"},{"t":"Angerburger Allee","v":"69"},{"t":"Anhalter Straﬂe","v":"70"},{"t":"Anna-Ebermann-Straﬂe","v":"71"},{"t":"Annemariestraﬂe","v":"72"},{"t":"Arcostraﬂe","v":"73"},{"t":"Arendsweg","v":"74"},{"t":"Arndtstraﬂe","v":"75"},{"t":"Arnimstraﬂe","v":"76"},{"t":"Arysallee","v":"77"},{"t":"Aschaffenburger Straﬂe","v":"78"},{"t":"Askanischer Platz","v":"79"},{"t":"Aﬂmannshauser Straﬂe","v":"80"},{"t":"Astridstraﬂe","v":"81"},{"t":"Auerbacher Straﬂe","v":"82"},{"t":"Auerstraﬂe","v":"83"},{"t":"Augsburger Straﬂe","v":"84"},{"t":"Augsburger Straﬂe","v":"85"},{"t":"Augustastraﬂe","v":"86"},{"t":"Auguste-Viktoria-Straﬂe","v":"87"},{"t":"Avus","v":"88"},{"t":"Avus","v":"89"},{"t":"Axel-Springer-Straﬂe","v":"90"},{"t":"Babelsberger Straﬂe","v":"91"},{"t":"Badenallee","v":"92"},{"t":"Badensche Straﬂe","v":"93"},{"t":"Baerwaldstraﬂe","v":"94"},{"t":"Bahnhofstraﬂe","v":"95"},{"t":"Bahrfeldtstraﬂe","v":"96"},{"t":"Ballenstedter Straﬂe","v":"97"},{"t":"Bamberger Straﬂe","v":"98"},{"t":"B‰nschstraﬂe","v":"99"},{"t":"Barbarossastraﬂe","v":"100"}];
+
+$(function() {
+
+	if($.browser.msie && parseInt($.browser.version, 10) == 6){
+		$.jGrowl("Some scripts cause this page to load slow on IE6", { sticky: true });
+		$.jGrowl("For dropdownReplacement plugin's performance on IE6 without other things running take a look:<br/><br/><a href='index_old.htm'>HERE</a>", { sticky: true });
+	}
+
+	if(window.SyntaxHighlighter){
+		SyntaxHighlighter.config.clipboardSwf = 'http://alexgorbatchev.com/pub/sh/current/scripts/clipboard.swf';
+		SyntaxHighlighter.all();
+	}
+
+	var loadTab = function(id){
+		var fn = demos[id];
+		if(fn && !demos[id].done) {
+			fn();
+			demos[id].done = true;
+		}
+	};
+
+	malsup.initializeTabs('examples', 'select', /select|input|advanced|data-access/, loadTab);
+
+});
+
+demos['getting-started'] = function(){
+	//getting started
+	$("#demoQuick").dropdownReplacement({selectCssWidth: 150, optionsDisplayNum: 9, options: [{"t":"Aachener Straﬂe","v":"1"},{"t":"Abbestraﬂe","v":"2"},{"t":"Adalbertstraﬂe","v":"3"},{"t":"Adam-von-Trott-Straﬂe","v":"4"},{"t":"Adenauerplatz","v":"5"},{"t":"Admiralstraﬂe","v":"6"},{"t":"Agathe-Lasch-Platz","v":"7"},{"t":"Ahornallee","v":"8"},{"t":"Ahrensfelder Chaussee","v":"9"},{"t":"Ahrenshooper Straﬂe","v":"10"},{"t":"Ahrweilerstraﬂe","v":"11"},{"t":"Akazienallee","v":"12"},{"t":"Albrecht-Achilles-Straﬂe","v":"13"},{"t":"Alemannenallee","v":"14"},{"t":"Alexandrinenstraﬂe","v":"15"},{"t":"Alfred-Dˆblin-Platz","v":"16"},{"t":"Allendorfer Weg","v":"17"},{"t":"Alte Allee","v":"18"},{"t":"Alte Brauerei","v":"19"},{"t":"Alte Jakobstraﬂe","v":"20"},{"t":"Altenburger Allee","v":"21"},{"t":"Altenhofer Straﬂe","v":"22"},{"t":"Alt-Lietzow","v":"23"},{"t":"Alt-Stralau","v":"24"},{"t":"Am Bahnhof Grunewald","v":"25"},{"t":"Am Bahnhof Jungfernheide","v":"26"},{"t":"Am Bahnhof Westend","v":"27"},{"t":"Am Berl","v":"28"},{"t":"Am Breiten Luch","v":"29"},{"t":"Am Comeniusplatz","v":"30"},{"t":"Am Containerbahnhof","v":"31"},{"t":"Am Dˆrferweg","v":"32"},{"t":"Am Dornbusch","v":"33"},{"t":"Am Faulen See","v":"34"},{"t":"Am Fliederbusch","v":"35"},{"t":"Am Glockenturm","v":"36"},{"t":"Am G¸terbahnhof Halensee","v":"37"},{"t":"Am Gutshof","v":"38"},{"t":"Am Hain","v":"39"},{"t":"Am Heidebusch","v":"40"},{"t":"Am Johannistisch","v":"41"},{"t":"Am Oberbaum","v":"42"},{"t":"Am Ostbahnhof","v":"43"},{"t":"Am Postbahnhof","v":"44"},{"t":"Am Postfenn","v":"45"},{"t":"Am Postfenn","v":"46"},{"t":"Am Rudolfplatz","v":"47"},{"t":"Am Rupenhorn","v":"48"},{"t":"Am Schillertheater","v":"49"},{"t":"Am Speicher","v":"50"},{"t":"Am Spreebord","v":"51"},{"t":"Am Tempelhofer Berg","v":"52"},{"t":"Am Vogelherd","v":"53"},{"t":"Am Volkspark","v":"54"},{"t":"Am Weinhang","v":"55"},{"t":"Am Westkreuz","v":"56"},{"t":"Am Wriezener Bahnhof","v":"57"},{"t":"Amselstraﬂe","v":"58"},{"t":"Amtsgerichtsplatz","v":"59"},{"t":"An der Barthschen Promenade","v":"60"},{"t":"An der Brauerei","v":"61"},{"t":"An der Flieﬂwiese","v":"62"},{"t":"An der Margaretenhˆhe","v":"63"},{"t":"An der Michaelbr¸cke","v":"64"},{"t":"An der Ostbahn","v":"65"},{"t":"An der Schillingbr¸cke","v":"66"},{"t":"Andreasplatz","v":"67"},{"t":"Andreasstraﬂe","v":"68"},{"t":"Angerburger Allee","v":"69"},{"t":"Anhalter Straﬂe","v":"70"},{"t":"Anna-Ebermann-Straﬂe","v":"71"},{"t":"Annemariestraﬂe","v":"72"},{"t":"Arcostraﬂe","v":"73"},{"t":"Arendsweg","v":"74"},{"t":"Arndtstraﬂe","v":"75"},{"t":"Arnimstraﬂe","v":"76"},{"t":"Arysallee","v":"77"},{"t":"Aschaffenburger Straﬂe","v":"78"},{"t":"Askanischer Platz","v":"79"},{"t":"Aﬂmannshauser Straﬂe","v":"80"},{"t":"Astridstraﬂe","v":"81"},{"t":"Auerbacher Straﬂe","v":"82"},{"t":"Auerstraﬂe","v":"83"},{"t":"Augsburger Straﬂe","v":"84"},{"t":"Augsburger Straﬂe","v":"85"},{"t":"Augustastraﬂe","v":"86"},{"t":"Auguste-Viktoria-Straﬂe","v":"87"},{"t":"Avus","v":"88"},{"t":"Avus","v":"89"},{"t":"Axel-Springer-Straﬂe","v":"90"},{"t":"Babelsberger Straﬂe","v":"91"},{"t":"Badenallee","v":"92"},{"t":"Badensche Straﬂe","v":"93"},{"t":"Baerwaldstraﬂe","v":"94"},{"t":"Bahnhofstraﬂe","v":"95"},{"t":"Bahrfeldtstraﬂe","v":"96"},{"t":"Ballenstedter Straﬂe","v":"97"},{"t":"Bamberger Straﬂe","v":"98"},{"t":"B‰nschstraﬂe","v":"99"},{"t":"Barbarossastraﬂe","v":"100"}]});
+	$("#carsSelect").dropdownReplacement();
+
+	$("#foodInput").dropdownReplacement({"options":
+	[{"v":"hamburg", "t":"Hamburger"},
+	{"v":"cutlet", "t":"Cutlet"},
+	{"v":"hotdog", "t":"Hotdog"},
+	{"v":"meat", "t":"meat"},
+	{"v":"apple", "t":"apple"},
+	{"v":"candy", "t":"candy"},
+	{"v":"long-thing", "t":"lots of snacks"}]});
+
+};
+var selectDemo = function(){
+	//examples:
+
+	$("#demo1").dropdownReplacement();
+
+
+	$("#demo2").dropdownReplacement({optionsDisplayNum: 5});
+
+
+	$("#demo3").dropdownReplacement({resizeSelectToFitOptions: true});
+
+
+	$("#demo4").dropdownReplacement({selectCssWidth: 100, onSelect : function(value, text, selectIndex){
+		alert("value: "+value+" text: "+text);
+		//in this context, this = select
+	}});
+};
+demos['input'] = function(){
+	$(".demo5").dropdownReplacement({optionsDisplayNum: 10, options: bigOptions , onSelect : function(value, text, selectIndex){
+		alert("value: "+value+" text: "+text+" index: "+selectIndex);
+		//in this context, this = select
+	}});
+
+	var $d6Selection = $("#demo6info");
+	var $demo6 = $("#demo6");
+	var selFn = function(){
+		//to demonstrate the point, ill pull directly from widgetized input instead of using the incoming values
+		$d6Selection.html("selection =" +$demo6.val());
+	};
+	var $ddNonMeat = $("#demo6").dropdownReplacement({options: [{"v":"salad", "t":"salad"},{"v":"fruit", "t":"fruit"},{"v":"corn", "t":"corn"},{"v":"icecream", "t":"icecream"}], onSelect : selFn});
+	var $ddMeat = $("#demo6").dropdownReplacement({options: [{"v":"steak", "t":"steak"},{"v":"lamb", "t":"lamb"},{"v":"pork", "t":"pork"}], onSelect : selFn});
+
+	$ddMeat.hide();
+	$(".demo6radio").change(function(){
+		if(this.id === "d6m"){
+			$ddMeat.show();
+			$ddNonMeat.hide();
+		} else {
+			$ddMeat.hide();
+			$ddNonMeat.show();
+		}
+	});
+};
+demos['select'] = selectDemo;
+demos['examples'] = selectDemo;
+
+demos['advanced'] = function(){
+	$("#demo7").dropdownReplacement({resizeOptionsToFitSelect: true, options: [{"v":"salad", "t":"salad"},{"v":"fruit", "t":"fruit"},{"v":"corn", "t":"corn"},{"v":"icecream", "t":"icecream"}]});
+
+	$("#demo8").dropdownReplacement({lookupMaxWordLength:5, optionsDisplayNum: 15, options: bigOptions  });
+
+	$("#demo9").dropdownReplacement({debounceLookupMs:10, debounceArrowsMs: 2, options: bigOptions });
+
+	$("#demo10").dropdownReplacement({selectCssWidth: 100, ellipsisText: decodeURIComponent("%E0%B2%A0_%E0%B2%A0"), options:  bigOptions });
+};
+
+demos['data-accees'] = function(){
+
+
+};
+
+demos['getting-started']();
+demos['getting-started'].done = true;
+
+var tab = function(i){
+	$('#tabs').tabs("select", i);
+}
+
+
+</script>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=5657884;
+var sc_invisible=1;
+var sc_partition=60;
+var sc_click_stat=1;
+var sc_security="3f08b06c";
+</script>
+
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script><noscript><div
+class="statcounter"><a title="wordpress visitor"
+href="http://www.statcounter.com/wordpress.com/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/5657884/0/3f08b06c/1/"
+alt="wordpress visitor" ></a></div></noscript>
+<!-- End of StatCounter Code -->
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+div.dropdownOpts {
+  border: 1px solid #000;
+	background-color:#FFF;
+	padding: 0;
+	display:none;
+	position:absolute;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+a.dropdownOpt {
+	padding:0 20px 0 2px; <!-- add to the 20 for ie -->
+	margin:0;
+	list-style:none;
+	display:block;
+	white-space:nowrap;
+	text-decoration:none;
+	color: #000;
+	cursor:pointer;
+	z-index: 100;
+  text-align:left;
+}
+
+a.dropdownOpt:hover {
+	background-color:#0A246A;
+	color:#FFF;
+}
+
+a.dropdownOpt.selectedOpt {
+	background-color:#0A246A;
+  color:#FFF !important;
+}
+
+.dropdown {
+	text-overflow:ellipsis;
+	overflow:hidden;
+	border-style:solid;
+	border-width:1px;
+	cursor:pointer;
+	text-align:left;
+  text-decoration:none;
+  background:#FFFFFF url('arrow-all.png') no-repeat scroll 100% center;
+	border-color:#404040 #D4D0C8 #D4D0C8 #404040;
+}
+
+<!-- do not modify these classes, they are used by the plugin for skinning -->
+
+.dd-ff-classic, .dd-all {
+	background:#FFFFFF url('arrow-all.png') no-repeat scroll 100% center !important;
+	border-color:#404040 #D4D0C8 #D4D0C8 #404040 !important;
+	padding:1px 15px 1px 1px;
+}
+
+.dd-ff-xp, .dd-ff-zuneNOIR {
+	background:#FFFFFF url('arrow-ff-xp.png') no-repeat scroll 100% center !important;
+	border-color:7f9db9 !important;
+	padding: 1px;
+	padding:1px 15px 1px 1px;
+}

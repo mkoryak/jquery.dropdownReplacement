@@ -1,0 +1,195 @@
+<html>
+<body>
+<title>jQuery.DropdownReplacement</title>
+<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type='text/javascript' src="jquery.scrollTo-1.4.2.js"></script>
+<script type='text/javascript' src="jquery.dropdownReplacement-0.3.js"></script>
+<link rel="stylesheet" href="jquery.dropdownReplacement-0.3.css" media="screen"/>
+<style type='text/css'>
+
+.myDropdown, select {
+	display:inline-block;
+}
+
+</style>
+<form>
+jQuery.DropdownReplacement demos. Last touched 3/11/10<br/><br/>
+- This script requires the scrollTo plugin.<br/>
+<a href="https://code.google.com/p/dogself-jquery/source/browse/trunk/jquery.dropdownReplacement/jquery.dropdownReplacement-0.3.js">script source in SVN</a><br/><br/>
+Features:
+<ul>
+<li>Looks like a native windows XP select, can be skinned.</li>
+<li>Seeks to option when you type</li>
+<li>Use arrow keys to navigate options</li>
+<li>Supports tab index and tabbing</li>
+<li>Build a widget from an input and JSON list of options</li>
+<li>Build a widget from an input and a prewritten options html element</li>
+<li>Build a widget from an existing select</li>
+<li>Multiple selects can share an options body, thus you can reduce page size.</li>
+<li>Lots of other options</li>
+</ul>
+
+<hr/>
+<b>Demos</b><br/>
+options built from json object, 3 selects share a single options body:
+<input class="myDropdown demo" id="demo1-1" name="select1" value="value2"/>
+<input class="myDropdown demo" id="demo1-2" name="select2" value="value"/>
+<input class="myDropdown demo" id="demo1-3" name="select3" value="remove on select"/>
+
+<br/><br/>
+options built from json object, select resized to fit options body:
+<input class="myDropdown" id="demo2" name="select4" value="value"/>
+
+<br/><br/>
+options built from json object, showing 10 items:
+<input class="myDropdown" id="demo3" name="select5" value="click me second"/>
+
+<br/><br/>
+options are prebuilt html:
+<input class="myDropdown" id="demo4" name="select6" value="click me second"/>
+
+<br/><br/>
+native select box for comparison:
+<select>
+	<option>i am a native selectbox</option>
+	<option>breal select2</option>
+	<option selected="true">selected val</option>
+	<option>creal select4</option>
+	<option>dreal select5</option>
+</select>
+
+<br/><br/>
+native select box converted into widget:
+<select id="demo5" name="select7">
+	<option>i am not native selectbox</option>
+	<option>breal select2</option>
+	<option selected="true">selected val</option>
+	<option>creal select4</option>
+	<option>dreal select5</option>
+</select>
+<select>
+	<option>i am a native selectbox</option>
+	<option>breal select2</option>
+	<option selected="true">selected val</option>
+	<option>creal select4</option>
+	<option>dreal select5</option>
+</select>
+
+<div id="prebuiltOptions1" style="display:none">
+	<a href="#" name="name1">Cakes</a>
+	<a href="#" name="name2">Oranges</a>
+	<a href="#" name="name3">Meat</a>
+	<a href="#" name="name4">Cheese</a>
+	<a href="#" name="name5">Cat</a>
+	<a href="#" name="name6">Apple</a>
+	<a href="#" name="name7">Chicken Pot Pie</a>
+</div>
+<hr/>
+for version 0.5 testing:
+
+<select>
+  <optgroup label="Swedish Cars">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <optgroup label="Cars">
+		    <option value="volvo">With 4 Wheels</option>
+		    <option value="saab">With 3 Wheels</option>
+  	</optgroup>
+  </optgroup>
+  <optgroup label="German Cars">
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </optgroup>
+</select>
+<br/><br/>
+<hr/>
+To do for 0.4:
+<ul>
+<li><s>show dropdown within window bounds</s></li>
+<li><s>support for transforming a native dropdown into widget</s></li>
+<li><s>support for pre-built options body</s></li>
+<li><s>formalize handling of onSelect</s></li>
+<li><s>reconcile TODOs</s></li>
+<li><s>arrow scroll by holding down key</s></li>
+<li>test</li>
+</ul>
+To do for 0.5:
+<ul>
+<li>some better docs</li>
+<li>throw exceptions when bad stuff happens</li>
+<li>deal with text-overflow on non-ie</li>
+<li>programatically retrieve option's value from DOM/input</li>
+<li>try to get rid of optionsWidthOffset</li>
+<li>optgroup support</li>
+<li>test</li>
+</ul>
+more food for thought:<br/>
+http://stackoverflow.com/questions/306097/is-there-a-fully-functional-dropdown-replacement-for-html-select-that-works-in-ie
+</form>
+<script type='text/javascript'>
+
+
+$(function(){
+
+	$(".demo").dropdownReplacement({
+			"options": [{"v":"name21", "t":"ARFalala"},{"v":"name22", "t":"value22"},{"v":"name3", "t":"value3"},{"v":"name5", "t":"asdfasd 5"},{"v":"name", "t":"value"}, {"v":"name2", "t":"value2"}, {"v":"name3", "t":"value asdfasdf asd looooong thing"}],
+	 });
+
+	 $("#demo2").dropdownReplacement({
+	 			options: [{"v":"name21", "t":"ARFalala"},{"v":"name22", "t":"value22"},{"v":"name3", "t":"value3"},{"v":"name5", "t":"asdfasd 5"},{"v":"name", "t":"value"}, {"v":"name2", "t":"value2"}, {"v":"name3", "t":"value asdfasdf asd looooong thing"}],
+	 			resizeSelectToFitOptions: true
+
+	 });
+
+	 $("#demo3").dropdownReplacement({
+	 		options: [{"v":"aarg", "t":"click me second"},{"v":"name22", "t":"blah blah"},{"v":"name3", "t":"blee"},{"v":"name5", "t":"aaawwweee 5"},{"v":"name", "t":"ooooooi"}, {"v":"name2", "t":"aaao!"}, {"v":"name3", "t":"WEEEEEEEEEEEEE!"},{"v":"aarg", "t":"oh yes!"},{"v":"name22", "t":"option"},{"v":"name3", "t":"jquery"},{"v":"name5", "t":"lets go"},{"v":"name", "t":"za"}, {"v":"name2", "t":"zza"}, {"v":"name3", "t":"zzza!"}],
+	 		resizeSelectToFitOptions: true,
+	 		optionsDisplayNum: 10
+	 });
+
+	 $("#demo4").dropdownReplacement({
+	 			"options": $("#prebuiltOptions1"),
+	 });
+
+	 $("#demo5").dropdownReplacement();
+
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=5657884;
+var sc_invisible=1;
+var sc_partition=60;
+var sc_click_stat=1;
+var sc_security="3f08b06c";
+</script>
+
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script><noscript><div
+class="statcounter"><a title="wordpress visitor"
+href="http://www.statcounter.com/wordpress.com/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/5657884/0/3f08b06c/1/"
+alt="wordpress visitor" ></a></div></noscript>
+<!-- End of StatCounter Code -->
+
+</body>
+</html>
