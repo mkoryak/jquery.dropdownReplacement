@@ -36,7 +36,7 @@ Project status
 This plugin is stable. It has been used in many production systems:
 
 - https://drupal.org/node/1835776
-- https://www.google.com/search?q=jquery.dropdownReplacement-0.5.3.js
+- https://www.google.com/search?q=%22jquery.dropdownReplacement.js%22
 
 Browser support
 ===============
